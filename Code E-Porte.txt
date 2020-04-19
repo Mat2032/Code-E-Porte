@@ -1,0 +1,60 @@
+#include <IRremote.h>
+int RECV_PIN = 11;
+IRrecv irrecv(RECV_PIN);
+decode_results results;
+  int RED_PIN = 8;
+  int GREEN_PIN = 9;
+  int BUZZER = 7;
+  int ONEval = 0;
+  int TWOval = 0;
+  int THREEval = 0;
+int FOURval = 0;
+  
+void setup()
+{
+  Serial.begin(9600);
+  irrecv.enableIRIn();
+      pinMode(BUZZER,OUTPUT);
+      pinMode (RED_PIN, OUTPUT);
+      pinMode (GREEN_PIN, OUTPUT);
+}
+
+void loop() {
+  if (irrecv.decode(&results)) {
+    Serial.println(results.value, HEX);
+    switch (results.value){
+     case 16582903:
+        Serial.print("ONE - ");
+        Serial.println(ONEval);
+        ONEval=ONEval+1;
+        if (ONEval % 2)
+      { digitalWrite(RED_PIN, HIGH);
+        digitalWrite(GREEN_PIN, LOW);
+}
+      delay(10);
+      break;
+      case 16615543:
+        Serial.print("TWO - ");
+        Serial.println(TWOval);
+        TWOval=TWOval+1;
+        if (TWOval % 2)
+      { digitalWrite(RED_PIN, LOW);
+        digitalWrite(GREEN_PIN, HIGH);
+}
+      delay(10);
+      break;
+      case 16599223:
+        Serial.print("THREE - ");
+        Serial.println(THREEval);
+        THREEval=THREEval+1;
+        if (THREEval % 2)
+      { digitalWrite(RED_PIN, LOW);
+        digitalWrite(GREEN_PIN, LOW);
+}
+      delay(10);
+      break;
+    }
+    delay(20);
+    irrecv.resume();
+  }
+}
